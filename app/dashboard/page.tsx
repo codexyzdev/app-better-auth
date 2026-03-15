@@ -1,15 +1,23 @@
 "use client";
 
 import { useSession } from "@/lib/auth-client";
+import { getInitials } from "@/hooks/use-initials";
+import { CheckCircle, MonitorCheck, CalendarDays } from "lucide-react";
+
+const stats = [
+    { label: "Account status", getValue: () => "Active",          icon: CheckCircle,   color: "text-emerald-400", border: "border-emerald-500/20" },
+    { label: "Sessions",       getValue: () => "1 active",        icon: MonitorCheck,  color: "text-indigo-400",  border: "border-indigo-500/20"  },
+    { label: "Member since",   getValue: (createdAt: Date) =>
+        new Date(createdAt).toLocaleDateString("en-US", { month: "short", year: "numeric" }),
+        icon: CalendarDays, color: "text-violet-400", border: "border-violet-500/20" },
+];
 
 export default function DashboardPage() {
     const { data: session } = useSession();
 
     if (!session) return null;
 
-    const initials = session.user.name
-        ? session.user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
-        : session.user.email[0].toUpperCase();
+    const initials = getInitials(session.user.name, session.user.email);
 
     return (
         <div className="px-4 sm:px-8 py-8">
@@ -23,21 +31,15 @@ export default function DashboardPage() {
 
             {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                {[
-                    { label: "Account status", value: "Active", icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z", color: "text-emerald-400", border: "border-emerald-500/20" },
-                    { label: "Sessions", value: "1 active", icon: "M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18", color: "text-indigo-400", border: "border-indigo-500/20" },
-                    { label: "Member since", value: new Date(session.user.createdAt).toLocaleDateString("en-US", { month: "short", year: "numeric" }), icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z", color: "text-violet-400", border: "border-violet-500/20" },
-                ].map((stat) => (
-                    <div key={stat.label} className={`rounded-xl border ${stat.border} p-5 bg-white/5 backdrop-blur-sm`}>
+                {stats.map(({ label, getValue, icon: Icon, color, border }) => (
+                    <div key={label} className={`rounded-xl border ${border} p-5 bg-white/5 backdrop-blur-sm`}>
                         <div className="flex items-center gap-3">
                             <div className="p-2 rounded-lg bg-white/5">
-                                <svg className={`w-5 h-5 ${stat.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={stat.icon} />
-                                </svg>
+                                <Icon className={`w-5 h-5 ${color}`} strokeWidth={1.5} />
                             </div>
                             <div>
-                                <p className="text-xs text-slate-400">{stat.label}</p>
-                                <p className="text-white font-medium text-sm mt-0.5">{stat.value}</p>
+                                <p className="text-xs text-slate-400">{label}</p>
+                                <p className="text-white font-medium text-sm mt-0.5">{getValue(session.user.createdAt)}</p>
                             </div>
                         </div>
                     </div>

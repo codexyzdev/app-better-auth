@@ -1,14 +1,13 @@
 "use client";
 
 import { useSession } from "@/lib/auth-client";
+import { getInitials } from "@/hooks/use-initials";
 
 export default function ProfilePage() {
     const { data: session } = useSession();
     if (!session) return null;
 
-    const initials = session.user.name
-        ? session.user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
-        : session.user.email[0].toUpperCase();
+    const initials = getInitials(session.user.name, session.user.email);
 
     const fields = [
         { label: "Full name", value: session.user.name },

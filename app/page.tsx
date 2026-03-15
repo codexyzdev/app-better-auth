@@ -2,6 +2,31 @@
 
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
+import { Zap, ShieldCheck, LayoutDashboard, ArrowRight } from "lucide-react";
+
+const features = [
+    {
+        icon: ShieldCheck,
+        title: "Secure by default",
+        desc: "Auth powered by Better Auth with sessions, CSRF protection and rate limiting out of the box.",
+        color: "text-emerald-400",
+        border: "border-emerald-500/20",
+    },
+    {
+        icon: Zap,
+        title: "Blazing fast",
+        desc: "Built on Next.js 15 with the App Router. Server components, streaming and edge-ready.",
+        color: "text-indigo-400",
+        border: "border-indigo-500/20",
+    },
+    {
+        icon: LayoutDashboard,
+        title: "Clean dashboard",
+        desc: "A responsive sidebar layout with profile, settings and everything you need to get going.",
+        color: "text-violet-400",
+        border: "border-violet-500/20",
+    },
+];
 
 export default function HomePage() {
     const { data: session, isPending } = useSession();
@@ -13,9 +38,7 @@ export default function HomePage() {
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <div className="w-7 h-7 rounded-lg bg-indigo-500 flex items-center justify-center">
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
+                            <Zap className="w-4 h-4 text-white" strokeWidth={2} />
                         </div>
                         <span className="text-white font-semibold text-sm">MyApp</span>
                     </div>
@@ -78,37 +101,13 @@ export default function HomePage() {
                 {/* Features */}
                 <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-20">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {[
-                            {
-                                icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
-                                title: "Secure by default",
-                                desc: "Auth powered by Better Auth with sessions, CSRF protection and rate limiting out of the box.",
-                                color: "text-emerald-400",
-                                border: "border-emerald-500/20",
-                            },
-                            {
-                                icon: "M13 10V3L4 14h7v7l9-11h-7z",
-                                title: "Blazing fast",
-                                desc: "Built on Next.js 15 with the App Router. Server components, streaming and edge-ready.",
-                                color: "text-indigo-400",
-                                border: "border-indigo-500/20",
-                            },
-                            {
-                                icon: "M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z",
-                                title: "Clean dashboard",
-                                desc: "A responsive sidebar layout with profile, settings and everything you need to get going.",
-                                color: "text-violet-400",
-                                border: "border-violet-500/20",
-                            },
-                        ].map((f) => (
-                            <div key={f.title} className={`bg-white/5 border ${f.border} rounded-2xl p-6 backdrop-blur-sm`}>
+                        {features.map(({ icon: Icon, title, desc, color, border }) => (
+                            <div key={title} className={`bg-white/5 border ${border} rounded-2xl p-6 backdrop-blur-sm`}>
                                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-4">
-                                    <svg className={`w-5 h-5 ${f.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d={f.icon} />
-                                    </svg>
+                                    <Icon className={`w-5 h-5 ${color}`} strokeWidth={1.75} />
                                 </div>
-                                <h3 className="text-white font-semibold mb-2">{f.title}</h3>
-                                <p className="text-slate-400 text-sm leading-relaxed">{f.desc}</p>
+                                <h3 className="text-white font-semibold mb-2">{title}</h3>
+                                <p className="text-slate-400 text-sm leading-relaxed">{desc}</p>
                             </div>
                         ))}
                     </div>
@@ -124,9 +123,7 @@ export default function HomePage() {
                             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition text-sm"
                         >
                             Create free account
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
+                            <ArrowRight className="w-4 h-4" strokeWidth={2} />
                         </Link>
                     </div>
                 </section>
